@@ -27,6 +27,7 @@ namespace LoadIBKData.Service
 
         public void GetData()
         {
+            _logger.LogInformation("HistoricalData starts");
             // Ending date for the time series
             String strEndDate = "20210509 16:00:00";
             // Amount of time up to the end date
@@ -36,7 +37,7 @@ namespace LoadIBKData.Service
             // Data type TRADES= OHLC Trades with volume
             String strWhatToShow = "TRADES";
             string days = _appSetting.Value.Days.ToString() + " D";
-            int requestId = 30000001;
+            int requestId = 1;
             EWrapperImpl ibClient = new EWrapperImpl();
             string Host = _appSetting.Value.Host;
             int Port = Int32.Parse(_appSetting.Value.Port);
