@@ -1,9 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace LoadIBKData.Service
+﻿namespace LoadIBKData.Service
 {
     public interface IHistoryDataService
     {
-        Task<string> GetData();
+        void GetData();
     }
 }

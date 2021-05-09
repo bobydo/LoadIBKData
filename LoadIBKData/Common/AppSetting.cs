@@ -13,7 +13,7 @@ namespace LoadIBKData.Common
         public string Currency { get;set; }
         public int Days { get;set; }
         public string Exchange { get;set; }
-        public string PrimmaryExch { get;set; }
+        public string PrimaryExch { get;set; }
         public string SecType { get;set; }
         public string Symbol { get; set; }
     }

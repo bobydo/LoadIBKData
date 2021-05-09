@@ -68,10 +68,8 @@ namespace LoadIBKData
                     {
                         try
                         {
-                            _logger.LogInformation("Hello World!");
-                            await _historyDataService.GetData();
+                            _historyDataService.GetData();
                             _exitCode = 0;
-                            await Task.Delay(1000);
                         }
                         catch (Exception ex)
                         {
