@@ -1,5 +1,6 @@
 ﻿using LoadIBKData.Backend;
 using LoadIBKData.Common;
+using LoadIBKData.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -44,26 +45,27 @@ namespace LoadIBKData
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
                 Host.CreateDefaultBuilder(args)
-                    .ConfigureServices((_, services) =>
+                    .ConfigureServices((hostContext, services) =>
                     {
-                        services.AddSingleton<IConfigurationFactory, ConfigurationFactory>()
-                                .AddHostedService<ConsoleHostedService>();
+                        services.AddHostedService<ConsoleHostedService>()
+                                .AddSingleton<IHistoryDataService, HistoryDataService>();
+                        services.AddOptions<AppSetting>().Bind(hostContext.Configuration.GetSection("AppSetting"));
                     });
         internal sealed class ConsoleHostedService : IHostedService
         {
             private int? _exitCode;
             private readonly ILogger _logger;
             private readonly IHostApplicationLifetime _appLifetime;
-            private readonly IConfigurationFactory _configurationFactory;
+            private readonly IHistoryDataService _historyDataService;
 
             public ConsoleHostedService(
                 ILogger<ConsoleHostedService> logger,
                 IHostApplicationLifetime appLifetime,
-                IConfigurationFactory configurationFactory)
+                IHistoryDataService historyDataService)
             {
                 _logger = logger;
                 _appLifetime = appLifetime;
-                _configurationFactory = configurationFactory;
+                _historyDataService = historyDataService;
             }
 
             public Task StartAsync(CancellationToken cancellationToken)
@@ -77,7 +79,7 @@ namespace LoadIBKData
                         try
                         {
                             _logger.LogInformation("Hello World!");
-                            _logger.LogInformation(_configurationFactory.Host);
+                            _logger.LogInformation(await _historyDataService.GetHost());
                             _exitCode = 0;
                             await Task.Delay(1000);
                         }
