@@ -4,6 +4,6 @@ namespace LoadIBKData.Service
 {
     public interface IHistoryDataService
     {
-        Task<string> GetHost();
+        Task<string> GetData();
     }
 }

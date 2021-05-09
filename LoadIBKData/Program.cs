@@ -1,5 +1,4 @@
-﻿using LoadIBKData.Backend;
-using LoadIBKData.Common;
+﻿using LoadIBKData.Common;
 using LoadIBKData.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,8 +11,6 @@ namespace LoadIBKData
 {
     class Program
     {
-        protected IBClient ibClient;
-
         /// <summary>
         /// https://dfederm.com/building-a-console-app-with-.net-generic-host/
         /// </summary>
@@ -23,28 +20,21 @@ namespace LoadIBKData
         {
             using IHost host = CreateHostBuilder(args).Build();
             return host.RunAsync();
-            //int port;
-            //string host = ;
-            //try
-            //{
-            //    port = Int32.Parse();
-            //    ibClient.ClientId = Int32.Parse(this.clientid_CT.Text);
-            //    ibClient.ClientSocket.eConnect(host, port, ibClient.ClientId);
-
-            //    var reader = new EReader(ibClient.ClientSocket, signal);
-
-            //    reader.Start();
-
-            //    new Thread(() => { while (ibClient.ClientSocket.IsConnected()) { signal.waitForSignal(); reader.processMsgs(); } }) { IsBackground = true }.Start();
-            //}
-            //catch (Exception)
-            //{
-            //    HandleErrorMessage(new ErrorMessage(-1, -1, "Please check your connection attributes."));
-            //}
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
                 Host.CreateDefaultBuilder(args)
+                    .ConfigureLogging((hostContext, logging)=>{
+                        logging.ClearProviders();
+                        logging.AddConfiguration(hostContext.Configuration.GetSection("Logging"));
+                        //https://github.com/serilog/serilog-extensions-logging-file
+                        logging.AddFile(hostContext.Configuration.GetSection("Logging"));
+                        //appsettings.Development.json has higher priority
+                        //logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace); 
+                        logging.AddDebug(); // only show up on debug output
+                        logging.AddConsole(); // only show up on console
+                        //EventSource,EventLog,TraceSource,AzureAppServiceFile,AzureAppServiceBlog,ApplicationInsights
+                    })
                     .ConfigureServices((hostContext, services) =>
                     {
                         services.AddHostedService<ConsoleHostedService>()
@@ -79,7 +69,7 @@ namespace LoadIBKData
                         try
                         {
                             _logger.LogInformation("Hello World!");
-                            _logger.LogInformation(await _historyDataService.GetHost());
+                            await _historyDataService.GetData();
                             _exitCode = 0;
                             await Task.Delay(1000);
                         }
