@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="IBKDll\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -29,21 +29,17 @@ namespace LoadIBKData.Service
         {
             _logger.LogInformation("HistoricalData starts");
             CallFistOne();
-            //CallAnother();
         }
 
         private void CallFistOne()
         {
             EWrapperImpl ibClient = new EWrapperImpl();
-            // Ending date for the time series
-            String strEndDate = "20210509 16:00:00";
             // Amount of time up to the end date
-            String strDuration = "1 W";
             // Bar size
             String strBarSize = "1 min";
             // Data type TRADES= OHLC Trades with volume
             String strWhatToShow = "TRADES";
-            string days = _appSetting.Value.Days.ToString() + " D";
+            string strDuration = _appSetting.Value.Days.ToString() + " D";
             int requestId = 1;
             string Host = _appSetting.Value.Host;
             int Port = Int32.Parse(_appSetting.Value.Port);
@@ -81,35 +77,13 @@ namespace LoadIBKData.Service
             // useRTH      - 1 = Use Real Time history
             // formatDate  - 3 = Date format YYYYMMDD
             // historicalDataOptions 
+            ibClient.Symbol = _appSetting.Value.Symbol;
             ibClient.ClientSocket.reqHistoricalData(requestId, contract, "", strDuration,
                                                     strBarSize, strWhatToShow, 1, 1, true,
                                                     historicalDataOptions);
             // Pause to review data
             Console.ReadKey();
             // Disconnect from TWS
-            ibClient.ClientSocket.eDisconnect();
-        }
-
-        private static void CallAnother()
-        {
-            EWrapperImpl ibClient = new EWrapperImpl();
-            ibClient.ClientSocket.eConnect("127.0.0.1", 7496, 0);
-            TimeSpan delay = new TimeSpan(0, 0, 15);
-            Thread.Sleep(delay);
-
-            Contract contract = new Contract();
-            contract.Symbol = "IBM";
-            contract.SecType = "STK";
-            contract.Exchange = "SMART";
-            contract.Currency = "USD";
-
-            List<TagValue> BogusmktDataOptions = new List<TagValue>();
-
-            ibClient.ClientSocket.reqHistoricalData(2, contract, "20210225 17:11:11 GMT",
-                "2 D", "1 hour", "BID_ASK", 1, 1, false, BogusmktDataOptions);
-
-            Console.ReadKey();
-            ibClient.ClientSocket.cancelHistoricalData(2);
             ibClient.ClientSocket.eDisconnect();
         }
     }

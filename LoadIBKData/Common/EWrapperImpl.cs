@@ -18,6 +18,8 @@ namespace LoadIBKData.Common
         public readonly EReaderSignal Signal;
         //! [socket_declare]
 
+        public string Symbol { get; set; }
+
         //! [socket_init]
         public EWrapperImpl()
         {
@@ -67,6 +69,20 @@ namespace LoadIBKData.Common
         {
             Console.WriteLine("Current Time: "+time+"\n");
         }
+
+        //! [historicaldata]
+        public virtual void historicalData(int reqId, Bar bar)
+        {
+            Console.WriteLine("HistoricalData. " + reqId + " - Symbol: " + Symbol + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
+        }
+        //! [historicaldata]
+
+        //! [historicaldataend]
+        public virtual void historicalDataEnd(int reqId, string startDate, string endDate)
+        {
+            Console.WriteLine("HistoricalDataEnd - " + reqId + " from " + startDate + " to " + endDate);
+        }
+        //! [historicaldataend]
 
         //! [tickprice]
         public virtual void tickPrice(int tickerId, int field, double price, TickAttrib attribs) 
@@ -347,12 +363,6 @@ namespace LoadIBKData.Common
         }
         //! [fundamentaldata]
 
-        //! [historicaldata]
-        public virtual void historicalData(int reqId, Bar bar)
-        {
-            Console.WriteLine("HistoricalData. " + reqId + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
-        }
-        //! [historicaldata]
 
         //! [marketdatatype]
         public virtual void marketDataType(int reqId, int marketDataType)
@@ -438,13 +448,6 @@ namespace LoadIBKData.Common
             printBondContractDetailsMsg(contractDetails);
             Console.WriteLine("BondContractDetails end. ReqId: " + requestId);
         }
-
-        //! [historicaldataend]
-        public virtual void historicalDataEnd(int reqId, string startDate, string endDate)
-        {
-            Console.WriteLine("HistoricalDataEnd - "+reqId+" from "+startDate+" to "+endDate);
-        }
-        //! [historicaldataend]
 
         public virtual void verifyMessageAPI(string apiData)
         {
