@@ -50,6 +50,8 @@ namespace LoadIBKData.Service
             int ClientId = Int32.Parse(_appSetting.Value.ClientId);
             ibClient.ClientSocket.eConnect(Host, Port, ClientId);
 
+
+            // https://interactivebrokers.github.io/tws-api/connection.html
             EClientSocket clientSocket = ibClient.ClientSocket;
 
             //Create a reader to consume messages from the TWS. The EReader will consume the incoming messages and put them in a queue
