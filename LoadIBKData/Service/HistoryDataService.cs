@@ -78,6 +78,7 @@ namespace LoadIBKData.Service
             // formatDate  - 3 = Date format YYYYMMDD
             // historicalDataOptions 
             ibClient.Symbol = _appSetting.Value.Symbol;
+            ibClient.startDate = DateTime.Now.AddDays(-_appSetting.Value.Days);
             ibClient.ClientSocket.reqHistoricalData(requestId, contract, "", strDuration,
                                                     strBarSize, strWhatToShow, 1, 1, true,
                                                     historicalDataOptions);

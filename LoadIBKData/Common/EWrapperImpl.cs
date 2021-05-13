@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IBApi;
+using LoadIBKData.Entities;
 
 namespace LoadIBKData.Common
 {
@@ -19,12 +20,15 @@ namespace LoadIBKData.Common
         //! [socket_declare]
 
         public string Symbol { get; set; }
+        public DateTime startDate { get; set; }
+        public List<Price> priceList { get; set; }
 
         //! [socket_init]
         public EWrapperImpl()
         {
             Signal = new EReaderMonitorSignal();
             clientSocket = new EClientSocket(this, Signal);
+            priceList = new List<Price>();
         }
         //! [socket_init]
 
@@ -73,7 +77,9 @@ namespace LoadIBKData.Common
         //! [historicaldata]
         public virtual void historicalData(int reqId, Bar bar)
         {
-            Console.WriteLine("HistoricalData. " + reqId + " - Symbol: " + Symbol + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
+            Price price = new Price(this.Symbol, bar);
+            priceList.Add(price);
+            //Console.WriteLine("HistoricalData. " + reqId + " - Symbol: " + Symbol + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
         }
         //! [historicaldata]
 

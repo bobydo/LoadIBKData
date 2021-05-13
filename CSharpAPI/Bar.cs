@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -15,6 +16,11 @@ namespace IBApi
      */
     public class Bar
     {
+
+        public Bar()
+        {
+
+        }
         public Bar(string time, double open, double high, double low, double close, long volume, int count, double wap)
         {
             Time = time;
@@ -30,9 +36,12 @@ namespace IBApi
 		/**
          * @brief The bar's date and time (either as a yyyymmss hh:mm:ss formatted string or as system time according to the request). Time zone is the TWS time zone chosen on login. 
          */
+        [NotMapped]
         public string Time { get; private set; }
-		
-		/**
+
+        public DateTime LoadTime { get { return DateTime.Parse(Time); } }
+
+        /**
          * @brief The bar's open price
          */
         public double Open { get; private set; }

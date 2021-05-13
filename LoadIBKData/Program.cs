@@ -1,5 +1,8 @@
 ﻿using LoadIBKData.Common;
+using LoadIBKData.Data;
+using LoadIBKData.Repository;
 using LoadIBKData.Service;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -40,6 +43,10 @@ namespace LoadIBKData
                         services.AddHostedService<ConsoleHostedService>()
                                 .AddSingleton<IHistoryDataService, HistoryDataService>();
                         services.AddOptions<AppSetting>().Bind(hostContext.Configuration.GetSection("AppSetting"));
+                        var connstring = hostContext.Configuration["ConnectionStrings:MyConnection"];
+                        services.AddDbContext<APIDbContext>(options =>
+                            options.UseSqlServer(connstring));
+                        services.AddScoped<EFCorePriceRepository>();
                     });
         internal sealed class ConsoleHostedService : IHostedService
         {
