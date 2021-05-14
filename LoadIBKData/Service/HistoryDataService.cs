@@ -6,6 +6,8 @@ using IBApi;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using LoadIBKData.Repository;
+using LoadIBKData.Entities;
 
 namespace LoadIBKData.Service
 {
@@ -13,13 +15,12 @@ namespace LoadIBKData.Service
     {
         private readonly IOptions<AppSetting> _appSetting;
         private readonly ILogger<HistoryDataService> _logger;
-        //private IBClient ibClient;
 
         public bool IsConnected { get; set; } = false;
         private EReaderMonitorSignal signal = new EReaderMonitorSignal();
         public HistoryDataService(
             ILogger<HistoryDataService> logger
-            ,IOptions<AppSetting> appSetting)
+            ,IOptions<AppSetting> appSetting) 
         {
             _appSetting = appSetting;
             _logger = logger;
@@ -82,7 +83,8 @@ namespace LoadIBKData.Service
             ibClient.ClientSocket.reqHistoricalData(requestId, contract, "", strDuration,
                                                     strBarSize, strWhatToShow, 1, 1, true,
                                                     historicalDataOptions);
-            // Pause to review data
+            //https://medium.com/net-core/repository-pattern-implementation-in-asp-net-core-21e01c6664d7
+
             Console.ReadKey();
             // Disconnect from TWS
             ibClient.ClientSocket.eDisconnect();

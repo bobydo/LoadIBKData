@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using IBApi;
 using LoadIBKData.Entities;
+using LoadIBKData.Repository;
 
 namespace LoadIBKData.Common
 {
     //! [ewrapperimpl]
     public class EWrapperImpl : EWrapper 
     {
-    //! [ewrapperimpl]
+
+        //! [ewrapperimpl]
         private int nextOrderId;
         //! [socket_declare]
         EClientSocket clientSocket;
@@ -77,6 +79,7 @@ namespace LoadIBKData.Common
         //! [historicaldata]
         public virtual void historicalData(int reqId, Bar bar)
         {
+            //Add service to DB here
             Price price = new Price(this.Symbol, bar);
             priceList.Add(price);
             //Console.WriteLine("HistoricalData. " + reqId + " - Symbol: " + Symbol + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);

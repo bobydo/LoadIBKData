@@ -46,7 +46,7 @@ namespace LoadIBKData
                         var connstring = hostContext.Configuration["ConnectionStrings:MyConnection"];
                         services.AddDbContext<APIDbContext>(options =>
                             options.UseSqlServer(connstring));
-                        services.AddScoped<EFCorePriceRepository>();
+                        //services.AddScoped<EFCorePriceRepository>();
                     });
         internal sealed class ConsoleHostedService : IHostedService
         {
