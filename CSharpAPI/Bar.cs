@@ -36,10 +36,14 @@ namespace IBApi
 		/**
          * @brief The bar's date and time (either as a yyyymmss hh:mm:ss formatted string or as system time according to the request). Time zone is the TWS time zone chosen on login. 
          */
-        [NotMapped]
         public string Time { get; private set; }
 
-        public DateTime LoadTime { get { return DateTime.Parse(Time); } }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime LoadTime
+        {
+            get { return DateTime.Parse(Time); }
+            private set { /* needed for EF */ }
+        }
 
         /**
          * @brief The bar's open price
