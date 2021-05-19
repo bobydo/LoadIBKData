@@ -1,7 +1,11 @@
-﻿namespace LoadIBKData.Service
+﻿using System.Threading.Tasks;
+
+namespace LoadIBKData.Service
 {
     public interface IHistoryDataService
     {
-        void GetData();
+        bool IsConnected { get; set; }
+
+        Task GetDataAsync();
     }
 }

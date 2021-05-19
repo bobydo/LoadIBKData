@@ -18,14 +18,18 @@ namespace LoadIBKData.Data
 
         public DbSet<Price> Prices { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //Log from SQL debug even for performance tuning
-            //optionsBuilder.LogTo(log => Debug.WriteLine(log));
-            optionsBuilder.LogTo(Console.WriteLine, new[] {DbLoggerCategory.Database.Command.Name},
-                LogLevel.Information)
-                .EnableSensitiveDataLogging();
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    //Log from SQL debug even for performance tuning
+        //    //optionsBuilder.LogTo(log => Debug.WriteLine(log));
+        //    optionsBuilder.UseSqlServer(
+        //        "Data Source=localhost;Initial Catalog=IBKData;Trusted_Connection=True;MultipleActiveResultSets=true")
+        //        .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name//,
+        //                                         //DbLoggerCategory.Database.Transaction.Name
+        //                                       },
+        //               LogLevel.Information)
+        //        .EnableSensitiveDataLogging();
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }

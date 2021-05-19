@@ -5,36 +5,44 @@ using System;
 using IBApi;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using LoadIBKData.Repository;
-using LoadIBKData.Entities;
+using Pirce = LoadIBKData.Entities.Price;
+using LoadIBKData.Data;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LoadIBKData.Service
 {
-    public class HistoryDataService : IHistoryDataService
+    public class HistoryDataService<Price> : IHistoryDataService
     {
         private readonly IOptions<AppSetting> _appSetting;
-        private readonly ILogger<HistoryDataService> _logger;
+        private readonly ILogger<HistoryDataService<Price>> _logger;
+        private readonly APIDbContext _context;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public bool IsConnected { get; set; } = false;
         private EReaderMonitorSignal signal = new EReaderMonitorSignal();
         public HistoryDataService(
-            ILogger<HistoryDataService> logger
-            ,IOptions<AppSetting> appSetting) 
+            ILogger<HistoryDataService<Price>> logger
+            , IOptions<AppSetting> appSetting
+            , APIDbContext context
+            , IServiceScopeFactory serviceScopeFactory)
         {
             _appSetting = appSetting;
             _logger = logger;
+            _context = context;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public void GetData()
+        public async Task GetDataAsync()
         {
             _logger.LogInformation("HistoricalData starts");
-            CallFistOne();
+            await CallFistOneAsync();
         }
 
-        private void CallFistOne()
+        private async Task CallFistOneAsync()
         {
-            EWrapperImpl ibClient = new EWrapperImpl();
+            EWrapperImpl ibClient = new EWrapperImpl(_serviceScopeFactory);
             // Amount of time up to the end date
             // Bar size
             String strBarSize = "1 min";

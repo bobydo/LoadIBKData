@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -41,7 +42,7 @@ namespace IBApi
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime LoadTime
         {
-            get { return DateTime.Parse(Time); }
+            get { return DateTime.ParseExact(Time,"yyyyMMdd  hh:mm:ss", CultureInfo.InvariantCulture); }
             private set { /* needed for EF */ }
         }
 

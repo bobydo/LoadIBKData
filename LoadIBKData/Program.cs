@@ -1,5 +1,6 @@
 ﻿using LoadIBKData.Common;
 using LoadIBKData.Data;
+using LoadIBKData.Entities;
 using LoadIBKData.Repository;
 using LoadIBKData.Service;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,9 @@ namespace LoadIBKData
                     .ConfigureServices((hostContext, services) =>
                     {
                         services.AddHostedService<ConsoleHostedService>()
-                                .AddSingleton<IHistoryDataService, HistoryDataService>();
+                                .AddSingleton<IHistoryDataService, HistoryDataService<Price>>()
+                                .AddSingleton<IHistoricPriceUnitOfWork, HistoricPriceUnitOfWork>()
+                                .AddSingleton<IGenericRepository<Price>, GenericRepository<Price>>();
                         services.AddOptions<AppSetting>().Bind(hostContext.Configuration.GetSection("AppSetting"));
                         var connstring = hostContext.Configuration["ConnectionStrings:MyConnection"];
                         services.AddDbContext<APIDbContext>(options =>
@@ -75,7 +78,7 @@ namespace LoadIBKData
                     {
                         try
                         {
-                            _historyDataService.GetData();
+                            await _historyDataService.GetDataAsync();
                             _exitCode = 0;
                         }
                         catch (Exception ex)
