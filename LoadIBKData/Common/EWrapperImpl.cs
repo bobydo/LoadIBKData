@@ -95,6 +95,7 @@ namespace LoadIBKData.Common
             //Add service to DB here
             Price price = new Price(this.Symbol, bar);
             priceList.Add(price);
+            ConvertToJsonFile.ToJsonFile<Price>(price, $"D:\\Data\\{price.Symbol}.json");
             //historicPriceUoW.Add(price);
             //Console.WriteLine("HistoricalData. " + reqId + " - Symbol: " + Symbol + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
         }
@@ -102,7 +103,7 @@ namespace LoadIBKData.Common
 
         //! [historicaldataend]
         public virtual void historicalDataEnd(int reqId, string startDate, string endDate)
-        {
+        { 
             Console.WriteLine("HistoricalDataEnd - " + reqId + " from " + startDate + " to " + endDate);
         }
         //! [historicaldataend]

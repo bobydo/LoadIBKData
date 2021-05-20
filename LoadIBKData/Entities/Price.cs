@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,15 @@ namespace LoadIBKData.Entities
         {
 
         }
+
+        //[Obsolete("This property has been deprecated and should no longer be used.", true)]
+        //public override string Time
+        //{
+        //    get
+        //    {
+        //        return DateTime.ParseExact(base.Time, "yyyyMMdd  hh:mm:ss", CultureInfo.InvariantCulture).ToString();
+        //    }
+        //}
 
         public Price(string symbol, Bar bar)
             : base(bar.Time, bar.Open, bar.High, bar.Low, bar.Close, bar.Volume, bar.Count, bar.WAP)
