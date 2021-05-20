@@ -29,16 +29,20 @@ namespace LoadIBKData.Common
         private readonly HistoricPriceUnitOfWork historicPriceUoW;
         //https://stackoverflow.com/questions/63334333/how-to-get-dbcontext-again-after-the-main-thread-disposes
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly APIDbContext context;
 
         //! [socket_init]
-        public EWrapperImpl(IServiceScopeFactory serviceScopeFactory)
+        public EWrapperImpl(APIDbContext getcontext
+            //IServiceScopeFactory serviceScopeFactory
+            )
         {
             Signal = new EReaderMonitorSignal();
             clientSocket = new EClientSocket(this, Signal);
             priceList = new List<Price>();
-            _serviceScopeFactory = serviceScopeFactory;
-            var scope = serviceScopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<APIDbContext>();
+            this.context = getcontext;
+            //_serviceScopeFactory = serviceScopeFactory;
+            //var scope = serviceScopeFactory.CreateScope();
+            //var context = scope.ServiceProvider.GetRequiredService<APIDbContext>();
             historicPriceUoW = new HistoricPriceUnitOfWork(context);
         }
         //! [socket_init]
@@ -91,7 +95,7 @@ namespace LoadIBKData.Common
             //Add service to DB here
             Price price = new Price(this.Symbol, bar);
             priceList.Add(price);
-            historicPriceUoW.Add(price);
+            //historicPriceUoW.Add(price);
             //Console.WriteLine("HistoricalData. " + reqId + " - Symbol: " + Symbol + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);
         }
         //! [historicaldata]

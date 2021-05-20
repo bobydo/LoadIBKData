@@ -42,10 +42,10 @@ namespace LoadIBKData.Service
 
         private async Task CallFistOneAsync()
         {
-            EWrapperImpl ibClient = new EWrapperImpl(_serviceScopeFactory);
+            EWrapperImpl ibClient = new EWrapperImpl(_context);
             // Amount of time up to the end date
             // Bar size
-            String strBarSize = "1 min";
+            String strBarSize = "5 mins";
             // Data type TRADES= OHLC Trades with volume
             String strWhatToShow = "TRADES";
             string strDuration = _appSetting.Value.Days.ToString() + " D";
