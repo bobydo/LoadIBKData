@@ -26,13 +26,21 @@ namespace LoadIBKData.Entities
         }
 
         //[Obsolete("This property has been deprecated and should no longer be used.", true)]
-        //public override string Time
-        //{
-        //    get
-        //    {
-        //        return DateTime.ParseExact(base.Time, "yyyyMMdd  hh:mm:ss", CultureInfo.InvariantCulture).ToString();
-        //    }
-        //}
+        public  DateTime DateTime
+        {
+            get
+            {
+                try
+                {
+                    return DateTime.ParseExact(base.Time, "YYYYMMDD  hh:mm:ss", CultureInfo.InvariantCulture);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return DateTime.Now;
+                }
+            }
+        }
 
         public Price(string symbol, Bar bar)
             : base(bar.Time, bar.Open, bar.High, bar.Low, bar.Close, bar.Volume, bar.Count, bar.WAP)
