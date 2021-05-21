@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LoadIBKData.Entities;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -7,22 +8,26 @@ namespace LoadIBKData.Common
 {
     public static class ConvertToJsonFile
     {
-        public static void ToJsonFile<T>(T data, string fileName)
+        public static void ToJsonFile<T>(List<T> data, string fileName)
         {
+            //https://stackoverflow.com/questions/20626849/how-to-append-a-json-file-without-disturbing-the-formatting/20627195
             //convert object to json string.
-            string json = JsonConvert.SerializeObject(data);
-            if (!File.Exists(fileName))
+            string jsonData;
+            if (File.Exists(fileName))
             {
-                using (TextWriter tw = new StreamWriter(fileName))
-                {
-                    tw.WriteLine(json);
-                }
+                var getData = System.IO.File.ReadAllText(fileName);
+                var priceList = JsonConvert.DeserializeObject<List<T>>(getData) ?? new List<T>();
+                foreach (var p in data)
+                    priceList.Add(p);
+                jsonData = JsonConvert.SerializeObject(priceList);
+                System.IO.File.WriteAllText(fileName, jsonData);
             }
             else
             {
-                using (StreamWriter sw = File.AppendText(fileName))
+                jsonData = JsonConvert.SerializeObject(data);
+                using (TextWriter tw = new StreamWriter(fileName))
                 {
-                    sw.WriteLine(json);
+                    tw.WriteLine(jsonData);
                 }
             }
         }
