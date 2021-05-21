@@ -45,8 +45,7 @@ namespace LoadIBKData.Service
             EWrapperImpl ibClient = new EWrapperImpl(_context);
             // Amount of time up to the end date
             // Bar size
-            //String strBarSize = "5 mins";
-            String strBarSize = "1 hour";
+            String strBarSize = _appSetting.Value.strBarSize.ToString();
             // Data type TRADES= OHLC Trades with volume
             String strWhatToShow = "TRADES";
             string strDuration = _appSetting.Value.Days.ToString() + " D";

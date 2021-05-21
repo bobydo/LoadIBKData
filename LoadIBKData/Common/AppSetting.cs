@@ -7,6 +7,7 @@ namespace LoadIBKData.Common
 {
     public class AppSetting 
     {
+        public string strBarSize { get; set; }
         public string Host { get;set; }
         public string Port { get;set; }
         public string ClientId { get;set; }
