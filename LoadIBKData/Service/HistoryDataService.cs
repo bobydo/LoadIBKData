@@ -66,16 +66,6 @@ namespace LoadIBKData.Service
             new Thread(() => { while (clientSocket.IsConnected()) { signal.waitForSignal(); reader.processMsgs(); } }) { IsBackground = true }.Start();
 
 
-            // Create a new contract to specify the security we are searching for
-            Contract contract = new Contract();
-            contract.SecType = _appSetting.Value.SecType;
-            contract.Symbol = _appSetting.Value.Symbol;
-            contract.Exchange = _appSetting.Value.Exchange;
-            contract.Currency = _appSetting.Value.Currency;
-            contract.PrimaryExch = _appSetting.Value.PrimaryExch;
-            // Create a new TagValue List object (for API version 9.71) 
-            List<TagValue> historicalDataOptions = new List<TagValue>();
-
             // Now call reqHistoricalData with parameters:
             // tickerId    - A unique identifer for the request
             // Contract    - The security being retrieved
@@ -86,10 +76,20 @@ namespace LoadIBKData.Service
             // useRTH      - 1 = Use Real Time history
             // formatDate  - 3 = Date format YYYYMMDD
             // historicalDataOptions 
-            ibClient.Symbol = _appSetting.Value.Symbol;
-            ibClient.startDate = DateTime.Now.AddDays(-_appSetting.Value.Days);
-            ibClient.ClientSocket.reqHistoricalData(requestId, contract, "", strDuration,
-                                                    strBarSize, strWhatToShow, 1, 1, true,
+            string endDate = _appSetting.Value.endDate.ToString();
+            string symbol = _appSetting.Value.Symbol;
+            // Create a new contract to specify the security we are searching for
+            Contract contract = new Contract();
+            contract.SecType = _appSetting.Value.SecType;
+            contract.Symbol = symbol;
+            contract.Exchange = _appSetting.Value.Exchange;
+            contract.Currency = _appSetting.Value.Currency;
+            contract.PrimaryExch = _appSetting.Value.PrimaryExch;
+            // Create a new TagValue List object (for API version 9.71) 
+            List<TagValue> historicalDataOptions = new List<TagValue>();
+            ibClient.Symbol = symbol;
+            ibClient.ClientSocket.reqHistoricalData(requestId++, contract, endDate, strDuration,
+                                                    strBarSize, strWhatToShow, 1, 1, false,
                                                     historicalDataOptions);
             //https://medium.com/net-core/repository-pattern-implementation-in-asp-net-core-21e01c6664d7
 

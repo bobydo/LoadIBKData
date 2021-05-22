@@ -17,5 +17,6 @@ namespace LoadIBKData.Common
         public string PrimaryExch { get;set; }
         public string SecType { get;set; }
         public string Symbol { get; set; }
+        public string endDate { get; set; }
     }
 }
