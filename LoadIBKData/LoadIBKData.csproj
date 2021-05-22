@@ -36,4 +36,8 @@
     <ProjectReference Include="..\CSharpAPI\CSharpAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="APIData\" />
+  </ItemGroup>
+
 </Project>
