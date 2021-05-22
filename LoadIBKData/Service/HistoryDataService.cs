@@ -22,6 +22,7 @@ namespace LoadIBKData.Service
 
         public bool IsConnected { get; set; } = false;
         private EReaderMonitorSignal signal = new EReaderMonitorSignal();
+        private readonly HistoricPriceUnitOfWork uofWork;
         public HistoryDataService(
             ILogger<HistoryDataService<Price>> logger
             , IOptions<AppSetting> appSetting
@@ -32,15 +33,31 @@ namespace LoadIBKData.Service
             _logger = logger;
             _context = context;
             _serviceScopeFactory = serviceScopeFactory;
+            uofWork = new HistoricPriceUnitOfWork(_context);
         }
 
         public async Task GetDataAsync()
         {
             _logger.LogInformation("HistoricalData starts");
-            await CallFistOneAsync();
+            if (_appSetting.Value.ReadJson)
+                getDataFromJson().GetAwaiter().GetResult();
+            else
+                await getDataFromAPI();
         }
 
-        private async Task CallFistOneAsync()
+        private async Task getDataFromJson()
+        {
+            string[] files = _appSetting.Value.JsonFiles.Split(",");
+            foreach (var fileName in files)
+            {
+                string file = LoadTestData.LoadData($"{fileName}.json");
+                var getPrices = ConvertToJsonFile.JsonFileToObj<LoadIBKData.Entities.Price>(file);
+                foreach(var price in getPrices)
+                    uofWork.Add(price);
+            }
+        }
+
+        private async Task getDataFromAPI()
         {
             EWrapperImpl ibClient = new EWrapperImpl(_context);
             // Amount of time up to the end date

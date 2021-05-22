@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace IBApi
 {
@@ -17,11 +18,7 @@ namespace IBApi
      */
     public class Bar
     {
-
-        public Bar()
-        {
-
-        }
+        [JsonConstructor]
         public Bar(string time, double open, double high, double low, double close, long volume, int count, double wap)
         {
             Time = time;

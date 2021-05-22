@@ -7,6 +7,8 @@ namespace LoadIBKData.Common
 {
     public class AppSetting 
     {
+        public bool ReadJson { get; set; }
+        public string JsonFiles { get; set; }
         public string strBarSize { get; set; }
         public string Host { get;set; }
         public string Port { get;set; }

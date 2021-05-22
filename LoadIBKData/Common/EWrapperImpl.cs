@@ -93,7 +93,7 @@ namespace LoadIBKData.Common
         public virtual void historicalData(int reqId, Bar bar)
         {
             //Add service to DB here
-            Price price = new Price(this.Symbol, bar);
+            Price price = new Price(0,this.Symbol, bar);
             priceList.Add(price);
             //historicPriceUoW.Add(price);
             //Console.WriteLine("HistoricalData. " + reqId + " - Symbol: " + Symbol + " - Time: " + bar.Time + ", Open: " + bar.Open + ", High: " + bar.High + ", Low: " + bar.Low + ", Close: " + bar.Close + ", Volume: " + bar.Volume + ", Count: " + bar.Count + ", WAP: " + bar.WAP);

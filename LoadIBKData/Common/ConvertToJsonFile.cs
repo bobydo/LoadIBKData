@@ -1,13 +1,17 @@
 ﻿using LoadIBKData.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace LoadIBKData.Common
 {
     public static class ConvertToJsonFile
     {
+        static int myLocker;
         public static void ToJsonFile<T>(List<T> data, string fileName)
         {
             //https://stackoverflow.com/questions/20626849/how-to-append-a-json-file-without-disturbing-the-formatting/20627195
@@ -34,20 +38,29 @@ namespace LoadIBKData.Common
 
         public static IList<T> JsonFileToObj<T>(string fileName)
         {
-            List<T> list = new List<T>();
-            //convert json string to objects
-            using (TextReader tr = new StreamReader(fileName))
+            try
             {
-                var objsString = tr.ReadToEnd();
-                //https://stackoverflow.com/questions/33608473/unable-to-cast-object-of-type-newtonsoft-json-linq-jarray-to-type-system-coll
-                JArray jsonResponse = JArray.Parse(objsString);
-                foreach (var item in jsonResponse)
+                List<T> list = new List<T>();
+                //convert json string to objects
+                using (TextReader tr = new StreamReader(fileName))
                 {
-                    T rowsResult = JsonConvert.DeserializeObject<T>(item.ToString());
-                    list.Add(rowsResult);
-                }
-                return list;
-            };
+                    var objsString = tr.ReadToEnd();
+                    //https://stackoverflow.com/questions/33608473/unable-to-cast-object-of-type-newtonsoft-json-linq-jarray-to-type-system-coll
+                    JArray jsonResponse = JArray.Parse(objsString);
+                    foreach (var item in jsonResponse)
+                    {
+                        //T rowsResult = JsonConvert.DeserializeObject<T>(item.ToString().Replace("{{","{").Replace("}}", "}"));
+                        T rowsResult = JsonConvert.DeserializeObject<T>(item.ToString());
+                        list.Add(rowsResult);
+                    }
+                    return list;
+                };
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }
